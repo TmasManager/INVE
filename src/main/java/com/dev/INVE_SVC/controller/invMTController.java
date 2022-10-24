@@ -37,7 +37,7 @@ public class invMTController {
 	//select 테스트
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
 	public ResponseEntity<List<Map<String, Object>>> getList(@RequestBody invMTModel model) throws Exception {
-		System.out.println("Controller.getList 호출 ");
+		System.out.println("Controller.getList 호출");
 		return ResponseEntity.ok(service.getList(model));
 		
 	}
