@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dev.INVE_SVC.dao.invMTDao">
+    
+	<!-- select 테스트 -->    
+    <select id="getList" parameterType="com.dev.INVE_SVC.dao.invMTDao" resultType="HashMap">
+       SELECT *
+         FROM TEST_ITEM_INV_MT
+    </select>
+
+	<!-- insert 테스트 -->
+    <insert id="insert" parameterType="com.dev.INVE_SVC.dao.invMTDao">
+
+    	INSERT INTO TEST_ITEM_INV_MT
+           (
+           TEST_ITIM_BSNS_CD,
+           TEST_ITIM_CORP_CD,
+           TEST_ITIM_PART_NO,
+           TEST_ITIM_QTY_ALL,
+           TEST_ITIM_QTY_AVAIL,
+           TEST_ITIM_QTY_OH
+           )
+     VALUES
+           (
+            #{TESTITIMBSNSCD},
+            #{TESTITIMCORPCD},
+            #{TESTITIMPARTNO},
+            #{TESTITIMQTYALL},
+            #{TESTITIMQTYAVAIL},
+            #{TESTITIMQTYOH}
+           )
+
+    </insert>
+
+	<!-- delete 테스트 -->    
+    <delete id="delete" parameterType="com.dev.INVE_SVC.dao.invMTDao">
+    	DELETE TEST_ITEM_INV_MT
+    	 WHERE TEST_ITIM_QTY_AVAIL = #{TESTITIMQTYAVAIL}
+	</delete>
+	
+	<!-- update 테스트 -->
+	<update id="update" parameterType="com.dev.INVE_SVC.dao.invMTDao">
+		UPDATE TEST_ITEM_INV_MT
+  		
+  		SET TEST_ITIM_BSNS_CD = #{TESTITIMBSNSCD},
+           	TEST_ITIM_CORP_CD = #{TESTITIMCORPCD},
+           	TEST_ITIM_PART_NO = #{TESTITIMPARTNO},
+           	TEST_ITIM_QTY_ALL = #{TESTITIMQTYALL},
+           	TEST_ITIM_QTY_AVAIL = #{TESTITIMQTYAVAIL},
+           	TEST_ITIM_QTY_OH = #{TESTITIMQTYOH}
+
+ 		WHERE TEST_ITIM_IDX = #{TESTITIMIDX}
+	
+	</update>
+
+
+	<!-- paging 테스트 -->
+    <select id="pagingTest" parameterType="com.dev.INVE_SVC.model.Criteria" resultType="HashMap">
+    	SELECT *
+		FROM TEST_ITEM_INV_MT
+		ORDER BY TEST_ITIM_IDX
+	    OFFSET #{startRow} ROWS
+	    FETCH NEXT #{perPageNum} ROW ONLY
+    </select>	
+
+	
+</mapper>

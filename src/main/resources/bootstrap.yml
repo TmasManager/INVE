@@ -1,0 +1,77 @@
+server:
+    port: 8086
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update #create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  application:
+      name: inve-service
+  main:
+    allow-circular-references: true
+  cloud:
+      config: 
+          uri: http://localhost:8071
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+            
+resilience4j.circuitbreaker:
+    instances:
+      materialService:
+        register-health-indicator: true  
+        ring-buffer-size-in-closed-state: 5
+        ring-buffer-size-in-half-open-state: 3
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+        record-exceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.io.IOException
+          - java.util.concurrent.TimeoutException
+          - org.springframework.web.client.ResourceAccessException
+          
+resilience4j.bulkhead: 
+    instances: 
+        bulkheadMaterialService:
+          max-wait-duration: 10ms
+          max-concurrent-calls: 20
+
+resilience4j:
+  thread-pool-bulkhead:
+    instances:
+      bulkheadMaterialService:
+        max-thread-pool-size: 1
+        core-thread-pool-size: 1
+        queue-capacity: 1
+        keep-alive-duration: 20ms
+
+resilience4j.retry:
+  instances:
+      retryMaterialService:
+        max-attempts: 5
+        wait-duration: 1000
+        retry-exceptions:
+          - java.util.concurrent.TimeoutException
+          
+resilience4j.ratelimiter:
+  instances:
+      materialService:
+        timeout-duration: 1000ms
+        limit-refresh-period: 5000
+        limit-for-period: 5        
+         
+keycloak:
+  realm: msa
+  resource: inve
+  credentials:
+    secret: Bpa6evlep2JDrXDZjAsiJhxfKqVAyqIc
+  ssl-required: none
+  use-resource-role-mappings: true
+  bearer-only: true
+  
